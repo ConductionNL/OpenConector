@@ -5,6 +5,10 @@ namespace OCA\OpenConnector\Service;
 use Adbar\Dot;
 use Exception;
 use JWadhams\JsonLogic;
+use OC\AppFramework\Http\Request;
+use OC\AppFramework\Http\RequestId;
+use OC\Config;
+use OC\Security\SecureRandom;
 use OCA\OpenConnector\Db\EndpointMapper;
 use OCA\OpenConnector\Db\SourceMapper;
 use OCA\OpenConnector\Service\AuthenticationService;
@@ -24,6 +28,7 @@ use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\IConfig;
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use Psr\Container\ContainerExceptionInterface;
@@ -60,6 +65,7 @@ class EndpointService
 		private readonly MappingService  $mappingService,
         private readonly EndpointMapper  $endpointMapper,
 		private readonly RuleMapper    $ruleMapper,
+		private readonly IConfig $config,
 	)
 	{
 	}
@@ -437,7 +443,7 @@ class EndpointService
 
 		$result = JsonLogic::apply(logic: $conditions, data: $data);
 
-		if ($result === true || $result === []) {
+		if ($result === true || $result === [] || $result === null) {
 			return [];
 		}
 
@@ -705,8 +711,29 @@ class EndpointService
 	 */
 	private function updateRequestWithRuleData(IRequest $request, array $ruleData): IRequest
 	{
-		// @todo: Here we need to implement the update request with rule data logic
-		return $request; // For now, just return original request
-	}
+		// create items array of request
+		$items = [
+			'get'		 => $_GET,
+			'post'		 => $_POST,
+			'files'		 => $_FILES,
+			'server'	 => $_SERVER,
+			'env'		 => $_ENV,
+			'cookies'	 => $_COOKIE,
+			'urlParams'  => $request->urlParams,
+			'params' => $ruleData['parameters'],
+			'method'     => $ruleData['method'],
+			'requesttoken' => false,
+		];
 
+		$items['server']['headers'] = $ruleData['headers'];
+
+		// build the new request
+		$request = new Request(
+			vars: $items,
+			requestId: new RequestId($request->getId(), new SecureRandom()),
+			config: $this->config
+		);
+
+		return $request; // Return the overridden request
+	}
 }

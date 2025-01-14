@@ -75,7 +75,12 @@ class EndpointMapper extends QBMapper
 	}
 
 	private function createEndpointRegex(string $endpoint) {
-		return '#'.preg_replace(pattern: ['#\/{{([^}}]+)}}\/#', '#\/{{([^}}]+)}}$#'], replacement: ['/([^/]+)/', '(/([^/]+))?'], subject: $endpoint).'#';
+		$regex = '#'.preg_replace(pattern: ['#\/{{([^}}]+)}}\/#', '#\/{{([^}}]+)}}$#'], replacement: ['/([^/]+)/', '(/([^/]+))?'], subject: $endpoint).'#';
+		if(str_ends_with(haystack: $regex, needle: '?#') === false && str_ends_with(haystack: $regex, needle: '$#') === false) {
+			$regex = substr($regex, 0, -1). '$#';
+		}
+
+		return $regex;
 	}
 
 	public function createFromArray(array $object): Endpoint
