@@ -46,13 +46,22 @@ import { navigationStore } from '../store/store.js'
 				<!-- This is correct according to the documentation, thats why there is a disable comment -->
 				<!-- eslint-disable-next-line vue/no-lone-template -->
 				<template>
-					<NcAppNavigationItem name="Subscriber List" />
+					<NcAppNavigationItem :active="navigationStore.selected === 'events'" name="Events" @click="navigationStore.setSelected('events')">
+						<template #icon>
+							<MessageTextFastOutline :size="20" />
+						</template>
+					</NcAppNavigationItem>
 					<NcAppNavigationItem name="Events" />
 				</template>
 			</NcAppNavigationItem>
 			<NcAppNavigationItem :active="navigationStore.selected === 'synchronizations'" name="Synchronization" @click="navigationStore.setSelected('synchronizations')">
 				<template #icon>
 					<VectorPolylinePlus :size="20" />
+				</template>
+			</NcAppNavigationItem>
+			<NcAppNavigationItem :active="navigationStore.selected === 'rules'" name="Rules" @click="navigationStore.setSelected('rules')">
+				<template #icon>
+					<SitemapOutline :size="20" />
 				</template>
 			</NcAppNavigationItem>
 		</NcAppNavigationList>
@@ -75,6 +84,8 @@ import SitemapOutline from 'vue-material-design-icons/SitemapOutline.vue'
 import Update from 'vue-material-design-icons/Update.vue'
 import VectorPolylinePlus from 'vue-material-design-icons/VectorPolylinePlus.vue'
 import CloudUploadOutline from 'vue-material-design-icons/CloudUploadOutline.vue'
+import MessageTextFastOutline from 'vue-material-design-icons/MessageTextFastOutline.vue'
+
 export default {
 	name: 'MainMenu',
 	components: {
@@ -91,6 +102,7 @@ export default {
 		Update,
 		VectorPolylinePlus,
 		CloudUploadOutline,
+		MessageTextFastOutline,
 	},
 	methods: {
 		openLink(url, type = '') {

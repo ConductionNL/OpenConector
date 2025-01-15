@@ -108,14 +108,18 @@ class SynchronizationService
 			throw new Exception('sourceId of synchronization cannot be empty. Canceling synchronization...');
 		}
 
+
 		try {
 			$objectList = $this->getAllObjectsFromSource(synchronization: $synchronization, isTest: $isTest);
 		} catch (TooManyRequestsHttpException $e) {
 			$rateLimitException = $e;
 		}
 
-		$synchronizedTargetIds = [];
 		foreach ($objectList as $key => $object) {
+			// We can only deal with arrays (bassed on the source empty values or string might be returned)
+			if (is_array($object) === false) {
+				continue;
+			}
 
 			// Check if object adheres to conditions.
 			// Take note, JsonLogic::apply() returns a range of return types, so checking it with '=== false' or '!== true' does not work properly.
@@ -291,7 +295,12 @@ class SynchronizationService
 	 *
 	 * @throws Exception If both dynamic and static endpoint configurations are missing or the endpoint cannot be determined.
 	 */
-	private function fetchExtraDataForObject(Synchronization $synchronization, array $extraDataConfig, array $object, ?string $originId = null)
+	private function fetchExtraDataForObject(
+		Synchronization $synchronization, 
+		array $extraDataConfig, 
+		array $object, ?string 
+		$originId = null
+	)
 	{
 		if (isset($extraDataConfig[$this::EXTRA_DATA_DYNAMIC_ENDPOINT_LOCATION]) === false && isset($extraDataConfig[$this::EXTRA_DATA_STATIC_ENDPOINT_LOCATION]) === false) {
 			return $object;
@@ -431,13 +440,13 @@ class SynchronizationService
 	 * synchronization contract with the synchronized target IDs and deletes the unmatched ones.
 	 *
 	 * @param Synchronization $synchronization The synchronization entity to process.
-	 * @param array $synchronizedTargetIds An array of target IDs that are still valid in the source.
+	 * @param array|null $synchronizedTargetIds An array of target IDs that are still valid in the source.
 	 *
 	 * @return int The count of objects that were deleted.
 	 *
 	 * @throws Exception If any database or object deletion errors occur during execution.
 	 */
-	public function deleteInvalidObjects(Synchronization $synchronization, array $synchronizedTargetIds): int
+	public function deleteInvalidObjects(Synchronization $synchronization, ?array $synchronizedTargetIds = []): int
 	{
 		$deletedObjectsCount = 0;
 		$type = $synchronization->getTargetType();
@@ -452,6 +461,11 @@ class SynchronizationService
 					if ($contract->getTargetId() !== null) {
 						$allContractTargetIds[] = $contract->getTargetId();
 					}
+				}
+
+				// Initialize $synchronizedTargetIds as empty array if null
+				if ($synchronizedTargetIds === null) {
+					$synchronizedTargetIds = [];
 				}
 
 				// Check if we have contracts that became invalid or do not exist in the source anymore
@@ -687,6 +701,7 @@ class SynchronizationService
 
 		$type = $synchronization->getSourceType();
 
+
 		switch ($type) {
             case 'register/schema':
                 //@todo: implement
@@ -733,7 +748,6 @@ class SynchronizationService
 		if ($source->getRateLimitLimit() !== null) {
 			$currentPage = $synchronization->getCurrentPage() ?? 1;
 		}
-
 
 		// Fetch all pages recursively
 		$objects = $this->fetchAllPages(
@@ -950,6 +964,10 @@ class SynchronizationService
 		// Check if a specific objects position is defined in the source configuration
 		if (empty($sourceConfig['resultsPosition']) === false) {
 			$position = $sourceConfig['resultsPosition'];
+			// if position is root, return the array
+			if ($position === '_root') {
+				return $array;
+			}
 			// Use Dot notation to access nested array elements
 			$dot = new Dot($array);
 			if ($dot->has($position) === true) {
@@ -972,11 +990,6 @@ class SynchronizationService
 			if (isset($array[$key]) === true) {
 				return $array[$key];
 			}
-		}
-
-		// If 'results' key exists, return its value
-		if (isset($array['results']) === true) {
-			return $array['results'];
 		}
 
 		// If no objects can be found, throw an exception

@@ -5,17 +5,16 @@ namespace OCA\OpenConnector\Service;
 use Adbar\Dot;
 use Exception;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use InvalidArgumentException;
-use OCA\OpenConnector\Db\ConsumerMapper;
 use OCA\OpenConnector\Db\EndpointMapper;
+use OCA\OpenConnector\Db\EventSubscriptionMapper;
 use OCA\OpenConnector\Db\JobMapper;
 use OCA\OpenConnector\Db\MappingMapper;
+use OCA\OpenConnector\Db\RuleMapper;
 use OCA\OpenConnector\Db\SourceMapper;
 use OCA\OpenConnector\Db\SynchronizationMapper;
 use OCP\App\IAppManager;
-use OCP\AppFramework\Db\QBMapper;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -32,10 +31,11 @@ class ObjectService
 	public function __construct(
 		private readonly IAppManager $appManager,
 		private readonly ContainerInterface $container,
-		private readonly ConsumerMapper     $consumerMapper,
 		private readonly EndpointMapper     $endpointMapper,
+		private readonly EventSubscriptionMapper $eventSubscriptionMapper,
 		private readonly JobMapper     		$jobMapper,
 		private readonly MappingMapper      $mappingMapper,
+		private readonly RuleMapper			$ruleMapper,
 		private readonly SourceMapper     	$sourceMapper,
 		private readonly SynchronizationMapper $synchronizationMapper,
 	)
@@ -288,11 +288,13 @@ class ObjectService
 
 		// If the source is internal, return the appropriate mapper based on the object type
 		return match ($objectTypeLower) {
-			'endpoint' => $this->endpointMapper,
-			'job' 	   => $this->jobMapper,
-			'mapping'  => $this->mappingMapper,
-			'source'   => $this->sourceMapper,
-			'synchronization' => $this->synchronizationMapper,
+			'endpoint' 			=> $this->endpointMapper,
+			'eventSubscription'	=> $this->eventSubscriptionMapper,
+			'job' 	   			=> $this->jobMapper,
+			'mapping'  			=> $this->mappingMapper,
+			'rule'     			=> $this->ruleMapper,
+			'source'   			=> $this->sourceMapper,
+			'synchronization' 	=> $this->synchronizationMapper,
 			default => throw new InvalidArgumentException("Unknown object type: $objectType"),
 		};
 

@@ -17,6 +17,7 @@ export const mockEndpointData = (): TEndpoint[] => [
 		targetId: '',
 		created: '2024-10-08T09:05:25.812Z',
 		updated: '2024-10-08T09:05:25.812Z',
+		rules: [], // Added empty rules array
 	},
 	{
 		id: 2,
@@ -33,6 +34,7 @@ export const mockEndpointData = (): TEndpoint[] => [
 		targetId: '',
 		created: '2024-10-08T09:05:25.812Z',
 		updated: '2024-10-08T09:05:25.812Z',
+		rules: [], // Added empty rules array
 	},
 ]
 

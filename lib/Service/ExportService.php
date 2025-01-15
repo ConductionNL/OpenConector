@@ -60,6 +60,12 @@ class ExportService
 			return new JSONResponse(data: ['error' => "Could not find a mapper for this {type}: " . $objectType], statusCode: 400);
 		}
 
+		if (in_array(strtolower($objectType), ['calllog','consumer','event','eventmessage','joblog',
+				'synchronizationcontract','synchronizationcontractlog']) === true
+		) {
+			return new JSONResponse(data: ['error' => "It is not allowed to export objects of {type}: " . $objectType], statusCode: 400);
+		}
+
 		try {
 			$object = $mapper->find($id);
 		} catch (Exception $exception) {
@@ -68,7 +74,7 @@ class ExportService
 
 		$objectArray = $this->prepareObject(objectType: $objectType, mapper: $mapper, object: $object);
 
-		$filename = ucfirst($objectType).'-'.$objectArray['name'].'-v'.$objectArray['version'];
+		$filename = ucfirst($objectType).'-'.($objectArray['name'] ?? $objectType).'-v'.($objectArray['version'] ?? '0.0.0');
 
 		$dataString = $this->encode(objectArray: $objectArray, type: $accept);
 

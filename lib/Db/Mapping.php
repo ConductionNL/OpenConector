@@ -34,6 +34,12 @@ class Mapping extends Entity implements JsonSerializable
 		$this->addType('dateModified', 'datetime');
 	}
 
+	// todo: This is a hotfix for a bug in the datamodel. Update the data model and remove this. 
+	public function getUpdated(): DateTime
+	{
+		return $this->dateModified ?? $this->dateCreated;
+	}
+
 	public function getJsonFields(): array
 	{
 		return array_keys(

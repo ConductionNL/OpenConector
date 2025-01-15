@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { sourceStore, endpointStore, jobStore, mappingStore, synchronizationStore } from '../../store/store.js'
+import { sourceStore, endpointStore, jobStore, mappingStore, synchronizationStore, ruleStore } from '../../store/store.js'
 import axios from 'axios'
 
 export const useImportExportStore = defineStore(
@@ -93,6 +93,13 @@ export const useImportExportStore = defineStore(
 									mappingStore.refreshMappingList().then(() => {
 										const mapping = mappingStore.mappingList.find(mapping => mapping.id === response.data.object.id)
 										mappingStore.setMappingItem(mapping)
+									})
+								)
+							case 'rule':
+								return (
+									ruleStore.refreshRuleList().then(() => {
+										const rule = ruleStore.ruleList.find(rule => rule.id === response.data.object.id)
+										ruleStore.setRuleItem(rule)
 									})
 								)
 							case 'synchronization':
