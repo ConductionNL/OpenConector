@@ -49,11 +49,12 @@ class SynchronizationService
 //    private ObjectService $objectService;
 	private Source $source;
 
-	const EXTRA_DATA_CONFIGS_LOCATION = 'extraDataConfigs';
-	const EXTRA_DATA_DYNAMIC_ENDPOINT_LOCATION = 'dynamicEndpointLocation';
-	const EXTRA_DATA_STATIC_ENDPOINT_LOCATION = 'staticEndpoint';
-	const KEY_FOR_EXTRA_DATA_LOCATION = 'keyToSetExtraData';
-	const MERGE_EXTRA_DATA_OBJECT_LOCATION = 'mergeExtraData';
+    const EXTRA_DATA_CONFIGS_LOCATION          = 'extraDataConfigs';
+    const EXTRA_DATA_DYNAMIC_ENDPOINT_LOCATION = 'dynamicEndpointLocation';
+    const EXTRA_DATA_STATIC_ENDPOINT_LOCATION  = 'staticEndpoint';
+    const KEY_FOR_EXTRA_DATA_LOCATION          = 'keyToSetExtraData';
+    const MERGE_EXTRA_DATA_OBJECT_LOCATION     = 'mergeExtraData';
+    const UNSET_CONFIG_KEY_LOCATION            = 'unsetConfigKey';
 
 
 	public function __construct(
@@ -353,7 +354,13 @@ class SynchronizationService
 			);
 		}
 
-		$extraData = $this->getObjectFromSource($synchronization, $endpoint);
+        $sourceConfig = $synchronization->getSourceConfig();
+        if (isset($extraDataConfig[$this::UNSET_CONFIG_KEY_LOCATION]) === true && isset($sourceConfig[$extraDataConfig[$this::UNSET_CONFIG_KEY_LOCATION]]) === true) {
+            unset($sourceConfig[$extraDataConfig[$this::UNSET_CONFIG_KEY_LOCATION]]); 
+            $synchronization->setSourceConfig($sourceConfig);
+        }
+
+        $extraData = $this->getObjectFromSource($synchronization, $endpoint);
 
 		// Temporary fix,
 		if (isset($extraDataConfig['extraDataConfigPerResult']) === true) {
@@ -745,9 +752,9 @@ class SynchronizationService
 		$currentPage = 1;
 
 		// Start with the current page
-		if ($source->getRateLimitLimit() !== null) {
-			$currentPage = $synchronization->getCurrentPage() ?? 1;
-		}
+        if ($source->getRateLimitLimit() !== null) {
+            $currentPage = $synchronization->getCurrentPage() ?? 1;
+        }
 
 		// Fetch all pages recursively
 		$objects = $this->fetchAllPages(

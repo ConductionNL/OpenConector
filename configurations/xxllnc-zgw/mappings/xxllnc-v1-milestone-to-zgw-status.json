@@ -10,7 +10,9 @@
     "unset": [],
     "cast": {
         "indicatieLaatstGezetteStatus": "bool",
-        "statustype": "unsetIfValue=="
+        "statustype": "unsetIfValue==",
+        "datumStatusGezet": "unsetIfValue==milestone.instance.date_modified",
+        "statustoelichting": "unsetIfValue==milestone.instance.phase_label"
     },
     "passTrough": false
 }

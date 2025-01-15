@@ -23,7 +23,20 @@
     "cast": {
         "informatieobject.versie": "integer",
         "informatieobject.bestandsomvang": "integer",
-        "informatieobject.inhoud": "jsonToArray"
+        "informatieobject.inhoud": "jsonToArray",
+        "titel": "unsetIfValue==instance.name",
+        "registratiedatum": "unsetIfValue==instance.file.instance.date_created",
+        "informatieobject.identificatie": "unsetIfValue==instance.number",
+        "informatieobject.creatiedatum": "unsetIfValue==instance.file.instance.date_created",
+        "informatieobject.titel": "unsetIfValue==instance.name",
+        "informatieobject.vertrouwelijksheidaanduiding": "unsetIfValue==",
+        "informatieobject.formaat": "unsetIfValue==instance.file.instance.mimetype",
+        "informatieobject.beginRegistratie": "unsetIfValue==instance.file.instance.date_modified",
+        "informatieobject.bestandsnaam": "unsetIfValue==instance.filename",
+        "informatieobject.verschijningsvorm": "unsetIfValue==",
+        "informatieobject.integriteit.algoritme": "unsetIfValue==",
+        "informatieobject.integriteit.waarde": "unsetIfValue==",
+        "informatieobject.integriteit.datum": "unsetIfValue==instance.file.instance.date_created"
     },
     "passTrough": false
 }

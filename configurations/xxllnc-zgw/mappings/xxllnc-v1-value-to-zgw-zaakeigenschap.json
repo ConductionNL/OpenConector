@@ -7,6 +7,10 @@
         "eigenschap": "{% for eigenschap in eigenschappen %}{% if eigenschap.naam == name %}{{ eigenschap['_self']['id'] }}{% endif %}{% endfor %}"
     },
     "unset": [],
-    "cast": [],
+    "cast": {
+        "naam": "unsetIfValue==",
+        "waarde": "unsetIfValue==",
+        "eigenschap": "unsetIfValue=="
+    },
     "passTrough": false
 }

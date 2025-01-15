@@ -31,7 +31,31 @@
     "unset": [],
     "cast": {
         "roltype": "unsetIfValue==",
-        "betrokkeneIdentificatie": "unsetIfValue=="
+        "betrokkeneIdentificatie": "unsetIfValue==",
+        "omschrijving": "unsetIfValue==",
+        "omschrijvingGeneriek": "unsetIfValue==",
+        "roltoelichting": "unsetIfValue==",
+        "registratiedatum": "unsetIfValue==",
+        "contactpersoonRol.emailadres": "unsetIfValue==",
+        "contactpersoonRol.functie": "unsetIfValue==",
+        "contactpersoonRol.telefoonnummer": "unsetIfValue==",
+        "contactpersoonRol.naam": "unsetIfValue==",
+        "betrokkeneIdentificatie._sourceId": "unsetIfValue==",
+        "betrokkeneIdentificatie.inpBsn": "unsetIfValue==",
+        "betrokkeneIdentificatie.inpA_nummer": "unsetIfValue==",
+        "betrokkeneIdentificatie.geslachtsnaam": "unsetIfValue==",
+        "betrokkeneIdentificatie.voorvoegselGeslachtsnaam": "unsetIfValue==",
+        "betrokkeneIdentificatie.voorletters": "unsetIfValue==",
+        "betrokkeneIdentificatie.voornamen": "unsetIfValue==",
+        "betrokkeneIdentificatie.geslachtsaanduiding": "unsetIfValue==",
+        "betrokkeneIdentificatie.geboortedatum": "unsetIfValue==",
+        "betrokkeneIdentificatie.achternaam": "unsetIfValue==",
+        "betrokkeneIdentificatie.verblijfsadres.wplWoonplaatsNaam": "unsetIfValue==",
+        "betrokkeneIdentificatie.verblijfsadres.aoaPostcode": "unsetIfValue==",
+        "betrokkeneIdentificatie.verblijfsadres.aoaHuisnummer": "unsetIfValue==",
+        "betrokkeneIdentificatie.verblijfsadres.aoaHuisletter": "unsetIfValue==",
+        "betrokkeneIdentificatie.verblijfsadres.aoaHuisnummertoevoeging": "unsetIfValue==",
+        "betrokkeneIdentificatie.verblijfsadres": "unsetIfValue=="
     },
     "passTrough": false
 }
