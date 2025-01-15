@@ -160,8 +160,8 @@ export default {
 
 			await consumerStore.saveConsumer({
 				...this.consumerItem,
-				domains: this.consumerItem.domains.trim().split(/ *, */g), // split on comma's, also take any spaces into consideration
-				ips: this.consumerItem.ips.trim().split(/ *, */g),
+				domains: this.consumerItem.domains.trim().split(/ *, */g).filter(Boolean), // split on comma's, also take any spaces into consideration
+				ips: this.consumerItem.ips.trim().split(/ *, */g).filter(Boolean),
 				authorizationType: this.authorizationTypeOptions.value.label,
 				authorizationConfiguration: [['']],
 				// authorizationConfiguration is unclear as to what it does and why it exists, but to avoid any issues it'll still make a array array string

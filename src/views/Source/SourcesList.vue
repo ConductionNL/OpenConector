@@ -58,6 +58,32 @@ import { sourceStore, navigationStore, searchStore } from '../../store/store.js'
 							</template>
 							Edit
 						</NcActionButton>
+						<NcActionButton @click="sourceStore.setSourceItem(source); navigationStore.setModal('testSource')">
+							<template #icon>
+								<Sync :size="20" />
+							</template>
+							Test
+						</NcActionButton>
+						<NcActionButton @click="() => {
+							sourceStore.setSourceItem(source)
+							sourceStore.setSourceConfigurationKey(null)
+							navigationStore.setModal('editSourceConfiguration')
+						}">
+							<template #icon>
+								<Plus :size="20" />
+							</template>
+							Add Configuration
+						</NcActionButton>
+						<NcActionButton @click="() => {
+							sourceStore.setSourceItem(source)
+							sourceStore.setSourceConfigurationKey(null)
+							navigationStore.setModal('editSourceConfigurationAuthentication')
+						}">
+							<template #icon>
+								<Plus :size="20" />
+							</template>
+							Add Authentication
+						</NcActionButton>
 						<NcActionButton @click="sourceStore.exportSource(source)">
 							<template #icon>
 								<FileExportOutline :size="20" />
@@ -100,6 +126,7 @@ import Pencil from 'vue-material-design-icons/Pencil.vue'
 import TrashCanOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 import FileExportOutline from 'vue-material-design-icons/FileExportOutline.vue'
 import FileImportOutline from 'vue-material-design-icons/FileImportOutline.vue'
+import Sync from 'vue-material-design-icons/Sync.vue'
 
 export default {
 	name: 'SourcesList',

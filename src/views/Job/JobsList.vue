@@ -58,6 +58,34 @@ import { jobStore, navigationStore, searchStore } from '../../store/store.js'
 							</template>
 							Edit
 						</NcActionButton>
+						<NcActionButton @click="() => {
+							jobStore.setJobItem(job)
+							jobStore.setJobArgumentKey(null)
+							navigationStore.setModal('editJobArgument')
+						}">
+							<template #icon>
+								<Plus :size="20" />
+							</template>
+							Add Argument
+						</NcActionButton>
+						<NcActionButton @click="jobStore.setJobItem(job); navigationStore.setModal('testJob')">
+							<template #icon>
+								<Update :size="20" />
+							</template>
+							Test
+						</NcActionButton>
+						<NcActionButton @click="jobStore.setJobItem(job); navigationStore.setModal('runJob')">
+							<template #icon>
+								<Play :size="20" />
+							</template>
+							Run
+						</NcActionButton>
+						<NcActionButton @click="jobStore.setJobItem(job); jobStore.refreshJobLogs()">
+							<template #icon>
+								<Sync :size="20" />
+							</template>
+							Refresh Logs
+						</NcActionButton>
 						<NcActionButton @click="jobStore.exportJob(job)">
 							<template #icon>
 								<FileExportOutline :size="20" />
@@ -97,6 +125,8 @@ import Pencil from 'vue-material-design-icons/Pencil.vue'
 import TrashCanOutline from 'vue-material-design-icons/TrashCanOutline.vue'
 import FileExportOutline from 'vue-material-design-icons/FileExportOutline.vue'
 import FileImportOutline from 'vue-material-design-icons/FileImportOutline.vue'
+import Play from 'vue-material-design-icons/Play.vue'
+import Sync from 'vue-material-design-icons/Sync.vue'
 
 export default {
 	name: 'JobsList',

@@ -51,7 +51,6 @@ import { navigationStore } from '../store/store.js'
 							<MessageTextFastOutline :size="20" />
 						</template>
 					</NcAppNavigationItem>
-					<NcAppNavigationItem name="Events" />
 				</template>
 			</NcAppNavigationItem>
 			<NcAppNavigationItem :active="navigationStore.selected === 'synchronizations'" name="Synchronization" @click="navigationStore.setSelected('synchronizations')">

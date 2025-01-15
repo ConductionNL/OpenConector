@@ -226,7 +226,7 @@ export default {
 			const rule = this.rulesList.find(rule => String(rule.id) === String(ruleId))
 			if (rule) {
 				ruleStore.setRuleItem(rule)
-				navigationStore.setView('rule')
+				navigationStore.setSelected('rules')
 			}
 		},
 		async removeRule(ruleId) {

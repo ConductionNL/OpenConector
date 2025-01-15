@@ -70,6 +70,12 @@ import { endpointStore, navigationStore, searchStore } from '../../store/store.j
 							</template>
 							Verwijderen
 						</NcActionButton>
+						<NcActionButton @click="endpointStore.setEndpointItem(endpoint); navigationStore.setModal('addEndpointRule')">
+							<template #icon>
+								<Plus :size="20" />
+							</template>
+							Add Rule
+						</NcActionButton>
 					</template>
 				</NcListItem>
 			</div>

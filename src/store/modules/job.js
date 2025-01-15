@@ -173,7 +173,7 @@ export const useJobStore = defineStore(
 				return { response, data }
 			},
 			// Create or save a job from store
-			saveJob(jobItem) {
+			async saveJob(jobItem) {
 				if (!jobItem) {
 					throw new Error('No job item to save')
 				}
@@ -197,7 +197,7 @@ export const useJobStore = defineStore(
 				// Remove the version field
 				delete jobToSave.version
 
-				return fetch(
+				const response = await fetch(
 					endpoint,
 					{
 						method,
@@ -207,17 +207,16 @@ export const useJobStore = defineStore(
 						body: JSON.stringify(jobToSave),
 					},
 				)
-					.then((response) => response.json())
-					.then((data) => {
-						this.setJobItem(data)
-						console.info('Job saved')
-						// Refresh the job list
-						return this.refreshJobList()
-					})
-					.catch((err) => {
-						console.error('Error saving job:', err)
-						throw err
-					})
+
+				console.info('Job saved')
+
+				const data = await response.json()
+				const entity = new Job(data)
+
+				this.setJobItem(entity)
+				this.refreshJobList()
+
+				return { response, data, entity }
 			},
 			// Export a job
 			exportJob(jobItem) {
